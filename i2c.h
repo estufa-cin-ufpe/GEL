@@ -5,6 +5,10 @@
 #include <drivers/i2c/adi_i2c.h>
 #endif
 
+#ifndef ADI_PWR_H
+#include <drivers/pwr/adi_pwr.h>
+#endif
+
 extern uint8_t i2c_mem[ADI_I2C_MEMORY_SIZE];
 extern ADI_I2C_HANDLE i2c_device;
 extern uint32_t i2c_hwErrors;

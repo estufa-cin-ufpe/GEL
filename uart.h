@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #endif
 
+#ifndef ADI_PWR_H
+#include <drivers/pwr/adi_pwr.h>
+#endif
+
 
 //uart control variables
 extern uint8_t uartMemory[ADI_UART_BIDIR_MEMORY_SIZE];
