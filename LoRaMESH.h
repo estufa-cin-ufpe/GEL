@@ -22,7 +22,7 @@
 #define MAX_PAYLOAD_SIZE 232
 #define MAX_BUFFER_SIZE 237
 
-/* -----  Default Comands List ----- */
+/* -----  Default Commands List ----- */
 typedef enum
 {
   CMD_LORAPARAMETER   = 0xD6,   /* Gets or Sets the LoRa modulation parameters */
@@ -77,39 +77,6 @@ typedef enum
 
 /* ----- Public Functions Prototype ----- */
 
-/**
-  * @brief Initializes Commands interface and the SoftwareSerial object on given Rx/Tx pins and Baudrate
-  * @param rxPin: Serial Rx pin
-  * @param txPin: Serial Tx pin
-  * @param baudRate: Serial baudrate, in bps
-  * @retval pointer to the SoftwareSerial object
-  */
-//SoftwareSerial* SerialCommandsInit(uint8_t rxPin, uint8_t txPin, uint32_t baudRate);
-
-
-
-/**
-  * @brief Initializes Transparent interface and the SoftwareSerial object on given Rx/Tx pins and Baudrate
-  * @param rxPin: Serial Rx pin
-  * @param txPin: Serial Tx pin
-  * @param baudRate: Serial baudrate, in bps
-  * @retval pointer to the SoftwareSerial object
-  */
-void SerialTranspInit(uint8_t rxPin, uint8_t txPin, uint32_t baudRate);
-
-
-
-/**
-  * @brief Prepares a frame to transmission via commands interface
-  * @param id: Target device's ID
-  * @param command: Byte that indicates the command
-  * @param payload: pointer to the array holding the payload
-  * @param payloadSize: payload size
-  * @retval MESH_OK or MESH_ERROR
-  */
-MeshStatus_Typedef PrepareFrameCommand(uint16_t id, uint8_t command, uint8_t* payload, uint8_t payloadSize);
-
-
 
 
 /**
@@ -135,20 +102,6 @@ MeshStatus_Typedef SendPacket();
 
 
 /**
-  * @brief Receives a packet from the commands interface
-  * @param id[out]: ID from the received message
-  * @param command[out]: received command
-  * @param payload[out]: buffer where the received payload will be copied to
-  * @param payloadSize[out]: received payload size
-  * @param timeout: reception timeout, in ms
-  * @retval MESH_OK or MESH_ERROR
-  */
-MeshStatus_Typedef ReceivePacketCommand(uint16_t* id, uint8_t* command, uint8_t* payload, uint8_t* payloadSize, uint32_t timeout);
-
-
-
-
-/**
   * @brief Receives a packet from the transparent interface
   * @param id[out]: ID from the received message
   * @param payload[out]: buffer where the received payload will be copied to
@@ -160,50 +113,6 @@ MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* 
 
 
 
-
-
-/**
-  * @brief Configures a GPIO of a device
-  * @param id: Target device's ID
-  * @param pin: pin to be configured (GPIO0 ... GPIO7)
-  * @param mode: operation mode (DIGITAL_IN, DIGITAL_OUT, ANALOG_IN)
-  * @param pull: internal pull resistor mode (PULL_OFF, PULLUP, PULLDOWN)
-  * @retval MESH_OK or MESH_ERROR
-  */
-MeshStatus_Typedef GpioConfig(uint16_t id, GPIO_Typedef pin, Mode_Typedef mode, Pull_Typedef pull);
-
-
-
-/**
-  * @brief Sets the logic level of a given pin
-  * @param id: Target device's ID
-  * @param pin: pin to be configured (GPIO0 ... GPIO7)
-  * @param value: 1 or 0
-  * @retval MESH_OK or MESH_ERROR
-  */
-MeshStatus_Typedef GpioWrite(uint16_t id, GPIO_Typedef pin, uint8_t value);
-
-
-
-/**
-  * @brief Reads the logic level (digital) or the analog value of a pin
-  * @param id: Target device's ID
-  * @param pin: pin to be configured (GPIO0 ... GPIO7)
-  * @param value[out]: 1 or 0 (digital mode); 0 to 4095 (analog mode)
-  * @retval MESH_OK or MESH_ERROR
-  */
-MeshStatus_Typedef GpioRead(uint16_t id, GPIO_Typedef pin, uint16_t* value);
-
-
-
-/**
-  * @brief Gets the ID, NET and UNIQUE ID info from the local device
-  * @param id[out]: Local device's id
-  * @param net[out]: Configured NET on local device
-  * @param uniqueId[out]: Device Unique ID
-  * @retval MESH_OK or MESH_ERROR
-  */
-MeshStatus_Typedef LocalRead(uint16_t* id, uint16_t* net, uint32_t* uniqueId);
 
 
 /**
