@@ -9,7 +9,7 @@ ADI_TMR_RESULT timer0Setup()
 {
 	ADI_TMR_RESULT result;
 
-	if((adi_tmr_Init(ADI_TMR_DEVICE_GP0 , timer0Callback, NULL, true)) != ADI_TMR_SUCCESS)
+	if((result = adi_tmr_Init(ADI_TMR_DEVICE_GP0 , timer0Callback, NULL, true)) != ADI_TMR_SUCCESS)
 	{
 		return result;
 	}
@@ -22,7 +22,7 @@ ADI_TMR_RESULT timer0Setup()
 	timer0Config.nAsyncLoad   = 1625u;
 	timer0Config.bReloading   = false;
 	timer0Config.bSyncBypass  = false;
-	if((adi_tmr_ConfigTimer(ADI_TMR_DEVICE_GP0 , &timer0Config)) != ADI_TMR_SUCCESS)
+	if((result = adi_tmr_ConfigTimer(ADI_TMR_DEVICE_GP0 , &timer0Config)) != ADI_TMR_SUCCESS)
 	{
 		return result;
 	}
@@ -54,7 +54,7 @@ void delay(uint16_t ms)
 	return;
 }
 
-void delay(uint16_t ms)
+void sleep(uint16_t ms)
 {
 	delayTarget = ms;
 	delayFlag = true;

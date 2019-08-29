@@ -37,14 +37,6 @@ void SerialFlush()
 
 
 /* ----- Public Function Definitions ----- */
-
-
-
-
-
-
-
-
 MeshStatus_Typedef PrepareFrameTransp(uint16_t id, uint8_t* payload, uint8_t payloadSize)
 {
   uint8_t i = 0;
