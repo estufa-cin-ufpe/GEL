@@ -1,9 +1,9 @@
 #include "uart.h"
 
 uint8_t uartMemory[ADI_UART_BIDIR_MEMORY_SIZE];
-uint32_t uart_hErrors;
-ADI_UART_HANDLE uartDevice;
-uint8_t* rx_buffer;
+uint32_t uart_hErrors = 0;
+ADI_UART_HANDLE uartDevice = NULL;
+uint8_t* rx_buffer = NULL;
 uint8_t rx_buffer_size = 0;
 
 void callback(void* pAppHandle, uint32_t nEvent, void* pArg)

@@ -5,6 +5,8 @@
     and operate the EndDevice LoRaMESH Radioenge
 
   Date: 13/12/18
+
+  Ported to ADuCM3029 by Rafael Marinho
 */
 #include "LoRaMESH.h"
 

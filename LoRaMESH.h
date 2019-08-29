@@ -5,12 +5,17 @@
     and operate the EndDevice LoRaMESH Radioenge
 
   Date: 13/12/18
+
+  Ported to ADuCM3029 by Rafael Marinho
 */
 #ifndef _LORA_MESH_
 #define _LORA_MESH_
 
 #include <stdint.h>
+
+#ifndef UART_H_
 #include "uart.h"
+#endif
 
 /* ----- Defines ------ */
 
