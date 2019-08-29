@@ -6,7 +6,7 @@ ADI_UART_HANDLE uartDevice = NULL;
 uint8_t* rx_buffer = NULL;
 uint8_t rx_buffer_size = 0;
 
-void callback(void* pAppHandle, uint32_t nEvent, void* pArg)
+void uartCallback(void* pAppHandle, uint32_t nEvent, void* pArg)
 {
 	switch (nEvent)
 	{
@@ -32,7 +32,7 @@ ADI_UART_RESULT uartSetup(uint32_t baudrate)
 	{
 		return result;
 	}
-	if((result = adi_uart_RegisterCallback(uartDevice, callback, NULL)) != ADI_UART_SUCCESS)
+	if((result = adi_uart_RegisterCallback(uartDevice, uartCallback, NULL)) != ADI_UART_SUCCESS)
 	{
 		return result;
 	}

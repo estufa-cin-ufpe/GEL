@@ -17,7 +17,7 @@ extern ADI_UART_HANDLE uartDevice;
 extern uint8_t* rx_buffer;
 extern uint8_t rx_buffer_size;
 
-void callback(void* pAppHandle, uint32_t nEvent, void* pArg);
+void uartCallback(void* pAppHandle, uint32_t nEvent, void* pArg);
 
 //setups UART driver
 //baudrate: baudrate
