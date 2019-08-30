@@ -20,6 +20,7 @@ typedef enum {
 	LOW = 0
 } logicLevel;
 
+extern uint8_t gpioMemory[ADI_GPIO_MEMORY_SIZE];
 
 extern pinMap SCL;
 extern pinMap SDA;
@@ -48,6 +49,7 @@ extern pinMap IO12;
 extern pinMap DS4;
 extern pinMap DS3;
 
+ADI_GPIO_RESULT gpioSetup();
 ADI_GPIO_RESULT pinMode(pinMap pm, mode m);
 ADI_GPIO_RESULT digitalWrite(pinMap pm, logicLevel b);
 logicLevel digitalRead(pinMap pm);

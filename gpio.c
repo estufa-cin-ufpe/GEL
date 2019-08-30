@@ -1,5 +1,7 @@
 #include "gpio.h"
 
+uint8_t gpioMemory[ADI_GPIO_MEMORY_SIZE];
+
 pinMap SCL = {ADI_GPIO_PORT0, ADI_GPIO_PIN_4};
 pinMap SDA = {ADI_GPIO_PORT0, ADI_GPIO_PIN_5};
 pinMap SCLK = {ADI_GPIO_PORT0, ADI_GPIO_PIN_0};
@@ -26,6 +28,11 @@ pinMap IO16 = {ADI_GPIO_PORT1, ADI_GPIO_PIN_0};
 pinMap IO12 = {ADI_GPIO_PORT0, ADI_GPIO_PIN_12};
 pinMap DS4 = {ADI_GPIO_PORT1, ADI_GPIO_PIN_10};
 pinMap DS3 = {ADI_GPIO_PORT2, ADI_GPIO_PIN_2};
+
+ADI_GPIO_RESULT gpioSetup()
+{
+	return adi_gpio_Init(gpioMemory, ADI_GPIO_MEMORY_SIZE);
+}
 
 ADI_GPIO_RESULT pinMode(pinMap pm, mode m)
 {
