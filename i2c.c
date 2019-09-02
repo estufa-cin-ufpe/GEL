@@ -37,6 +37,7 @@ ADI_I2C_RESULT i2cRead(uint16_t const SlaveAddress, uint8_t bytes, uint8_t* data
 		return result;
 
 	//build transaction
+	transaction.nPrologueSize = 0;
 	transaction.nDataSize = bytes;
 	transaction.pData = data;
 	transaction.bReadNotWrite = true;
@@ -59,6 +60,7 @@ ADI_I2C_RESULT i2cWrite(uint16_t const SlaveAddress, uint8_t bytes, uint8_t* dat
 		return result;
 
 	//build transaction
+	transaction.nPrologueSize = 0;
 	transaction.nDataSize = bytes;
 	transaction.pData = data;
 	transaction.bReadNotWrite = false;
