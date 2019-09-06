@@ -38,11 +38,23 @@ ADI_GPIO_RESULT pinMode(pinMap pm, mode m)
 {
 	if(m == INPUT)
 	{
-		return adi_gpio_PullUpEnable(pm.port, pm.pin, true);
+		return adi_gpio_InputEnable(pm.port, pm.pin, true);
 	}
-	else
+	else if(m == OUTPUT)
 	{
 		return adi_gpio_OutputEnable(pm.port, pm.pin, true);
+	}
+	else if(m == INPUT_PULLUP)
+	{
+		ADI_GPIO_RESULT result;
+		if(ADI_GPIO_SUCCESS != (result = adi_gpio_InputEnable(pm.port, pm.pin, true)))
+		{
+			return result;
+		}
+		if(ADI_GPIO_SUCCESS != (result = adi_gpio_PullUpEnable(pm.port, pm.pin, true)))
+		{
+			return result;
+		}
 	}
 	return 0;
 }
@@ -66,3 +78,23 @@ logicLevel digitalRead(pinMap pm)
 	adi_gpio_GetData(pm.port, pm.pin, &val);
 	return val ? HIGH : LOW;
 }
+
+ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im)
+{
+	ADI_GPIO_RESULT result;
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_SetGroupInterruptPins(pm.port, ADI_GPIO_INTA_IRQ , pm.pin)))
+	{
+		return result;
+	}
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_GroupInterruptPolarityEnable(pm.port, pm.pin, im)))
+	{
+		return result;
+	}
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_RegisterCallback(ADI_GPIO_INTA_IRQ, cb, (void*)ADI_GPIO_INTA_IRQ)))
+	{
+		return result;
+	}
+
+	return ADI_GPIO_SUCCESS;
+}
+

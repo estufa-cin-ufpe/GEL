@@ -12,8 +12,14 @@ typedef struct {
 
 typedef enum {
 	INPUT,
-	OUTPUT
+	OUTPUT,
+	INPUT_PULLUP
 } mode;
+
+typedef enum {
+	FALLING = false,
+	RISING = true
+} Imode;
 
 typedef enum {
 	HIGH = 1,
@@ -53,6 +59,6 @@ ADI_GPIO_RESULT gpioSetup();
 ADI_GPIO_RESULT pinMode(pinMap pm, mode m);
 ADI_GPIO_RESULT digitalWrite(pinMap pm, logicLevel b);
 logicLevel digitalRead(pinMap pm);
-
+ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im);
 
 #endif
