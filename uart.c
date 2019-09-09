@@ -90,15 +90,19 @@ ADI_UART_RESULT uartSetup(uint32_t baudrate)
 	return ADI_UART_SUCCESS;
 }
 
-uint8_t* uartRead()
+uint8_t uartRead()
 {
 	if(rx_buffer_size>0)
 	{
+		uint8_t temp = rx_buffer[0];
 		rx_buffer_size--;
-		rx_buffer = (uint8_t*)realloc(rx_buffer, (rx_buffer_size+1)*sizeof(uint8_t));
-		return rx_buffer + rx_buffer_size;
+		uint8_t* tempbuf = (uint8_t*)malloc(sizeof(uint8_t)*rx_buffer_size);
+		memcpy(tempbuf, rx_buffer+1, rx_buffer_size);
+		free(rx_buffer);
+		rx_buffer = tempbuf;
+		return temp;
 	}
-	return NULL;
+	return -1;
 }
 
 int uartReadBuffer(uint8_t* buf, uint8_t len)
@@ -107,7 +111,10 @@ int uartReadBuffer(uint8_t* buf, uint8_t len)
 	{
 		memcpy(buf, rx_buffer, len);
 		rx_buffer_size-=len;
-		rx_buffer = (uint8_t*)realloc(rx_buffer, (rx_buffer_size+1)*sizeof(uint8_t));
+		uint8_t* tempbuf = (uint8_t*)malloc(sizeof(uint8_t)*rx_buffer_size);
+		memcpy(tempbuf, rx_buffer+len, rx_buffer_size);
+		free(rx_buffer);
+		rx_buffer = tempbuf;
 		return 0;
 	}
 	return 1;

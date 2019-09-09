@@ -31,7 +31,7 @@ ADI_UART_RESULT uartSetup(uint32_t baudrate);
 uint8_t uart_available();
 
 //returns one byte from buffer as a pointer
-uint8_t* uartRead();
+uint8_t uartRead();
 
 //reads len bytes from buffer. Returns 0 in case of success and 1 otherwise
 //buf: pointer where the bytes are going to be copied to.
