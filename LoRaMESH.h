@@ -1,5 +1,5 @@
 /* ---------------------------------------------------
-        Radioenge Equipamentos de Telecomunicações
+        Radioenge Equipamentos de Telecomunicaï¿½ï¿½es
    ---------------------------------------------------
     This library contains a set of functions to configure
     and operate the EndDevice LoRaMESH Radioenge
@@ -78,6 +78,15 @@ typedef enum
 
 /* ----- Public Functions Prototype ----- */
 
+/**
+  * @brief Prepares a frame to transmission via commands interface
+  * @param id: Target device's ID
+  * @param command: Byte that indicates the command
+  * @param payload: pointer to the array holding the payload
+  * @param payloadSize: payload size
+  * @retval MESH_OK or MESH_ERROR
+  */
+MeshStatus_Typedef PrepareFrameCommand(uint16_t id, uint8_t command, uint8_t* payload, uint8_t payloadSize);
 
 
 /**
@@ -100,6 +109,16 @@ MeshStatus_Typedef PrepareFrameTransp(uint16_t id, uint8_t* payload, uint8_t pay
 MeshStatus_Typedef SendPacket();
 
 
+/**
+  * @brief Receives a packet from the commands interface
+  * @param id[out]: ID from the received message
+  * @param command[out]: received command
+  * @param payload[out]: buffer where the received payload will be copied to
+  * @param payloadSize[out]: received payload size
+  * @param timeout: reception timeout, in ms
+  * @retval MESH_OK or MESH_ERROR
+  */
+MeshStatus_Typedef ReceivePacketCommand(uint16_t* id, uint8_t* command, uint8_t* payload, uint8_t* payloadSize, uint32_t timeout);
 
 
 /**
