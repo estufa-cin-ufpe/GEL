@@ -111,7 +111,7 @@ MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* 
   {
     if(uart_available() > 0)
     {
-      frame.buffer[i++] = *uartRead();
+      frame.buffer[i++] = uartRead();
 	    waitNextByte = 500;
     }
 
@@ -120,7 +120,7 @@ MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* 
       waitNextByte--;
     }
     timeout--;
-    delay(1);
+    delay(1); //definir uma função para delay, não pode comentar ou remover essa liha.
   }
 
   /* In case it didn't get any data */
