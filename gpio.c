@@ -26,8 +26,8 @@ pinMap AIN4 = {ADI_GPIO_PORT2, ADI_GPIO_PIN_7};
 pinMap AIN5 = {ADI_GPIO_PORT2, ADI_GPIO_PIN_8};
 pinMap IO16 = {ADI_GPIO_PORT1, ADI_GPIO_PIN_0};
 pinMap IO12 = {ADI_GPIO_PORT0, ADI_GPIO_PIN_12};
-pinMap DS4 = {ADI_GPIO_PORT1, ADI_GPIO_PIN_10};
-pinMap DS3 = {ADI_GPIO_PORT2, ADI_GPIO_PIN_2};
+pinMap DS4 = {ADI_GPIO_PORT1, ADI_GPIO_PIN_15};
+pinMap DS3 = {ADI_GPIO_PORT2, ADI_GPIO_PIN_0};
 
 ADI_GPIO_RESULT gpioSetup()
 {
@@ -79,10 +79,10 @@ logicLevel digitalRead(pinMap pm)
 	return val ? HIGH : LOW;
 }
 
-ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im)
+ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im, ADI_GPIO_IRQ gp)
 {
 	ADI_GPIO_RESULT result;
-	if(ADI_GPIO_SUCCESS != (result = adi_gpio_SetGroupInterruptPins(pm.port, ADI_GPIO_INTA_IRQ , pm.pin)))
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_SetGroupInterruptPins(pm.port, gp , pm.pin)))
 	{
 		return result;
 	}
@@ -90,7 +90,22 @@ ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im)
 	{
 		return result;
 	}
-	if(ADI_GPIO_SUCCESS != (result = adi_gpio_RegisterCallback(ADI_GPIO_INTA_IRQ, cb, (void*)ADI_GPIO_INTA_IRQ)))
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_RegisterCallback(gp, cb, (void*)gp)))
+	{
+		return result;
+	}
+
+	return ADI_GPIO_SUCCESS;
+}
+
+ADI_GPIO_RESULT setupInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im, ADI_GPIO_IRQ gp)
+{
+	ADI_GPIO_RESULT result;
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_SetGroupInterruptPins(pm.port, gp , pm.pin)))
+	{
+		return result;
+	}
+	if(ADI_GPIO_SUCCESS != (result = adi_gpio_GroupInterruptPolarityEnable(pm.port, pm.pin, im)))
 	{
 		return result;
 	}
