@@ -25,9 +25,6 @@ static const uint8_t daysInMonth [];
 ADI_I2C_RESULT setAlarm(); //por enquanto o valor é hardcoded
 ADI_I2C_RESULT resetAlarm();
 
-static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d);
-static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s);
-static uint8_t bcd2bin (uint8_t val);
 DateTime now();
 uint32_t unixtime(DateTime dt);
 
@@ -57,10 +54,5 @@ bool checkIfAlarm(uint8_t Alarm);
 void enableOscillator(bool TF, bool battery, uint8_t frequency);
 void enable32kHz(bool TF);
 bool oscillatorCheck();
-
-static uint8_t decToBcd(uint8_t val);
-static uint8_t bcdToDec(uint8_t val);
-static uint8_t readControlByte(bool which);
-static void writeControlByte(uint8_t control, bool which);
 
 #endif /* LIBS_DS3231_H_ */

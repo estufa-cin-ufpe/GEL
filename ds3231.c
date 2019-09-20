@@ -2,6 +2,59 @@
 
 static const uint8_t daysInMonth [] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s)
+{
+    return ((days * 24L + h) * 60 + m) * 60 + s;
+}
+
+static uint8_t bcd2bin (uint8_t val)
+{
+	return val - 6 * (val >> 4);
+}
+
+static uint8_t decToBcd(uint8_t val)
+{
+	return ( (val/10*16) + (val%10) );
+}
+
+static uint8_t bcdToDec(uint8_t val)
+{
+	return ( (val/16*10) + (val%16) );
+}
+
+static uint8_t readControlByte(bool which)
+{
+	uint8_t data;
+
+	if(which)
+	{
+		data = 0x0F;
+	}
+	else
+	{
+		data = 0x0E;
+	}
+	i2cWriteDS3231(1, &data);
+
+	i2cReadDS3231(1, &data);
+	return data;
+}
+
+static void writeControlByte(uint8_t control, bool which)
+{
+	uint8_t data[2];
+	if(which)
+	{
+		data[0] = 0x0F;
+	}
+	else
+	{
+		data[0] = 0x0E;
+	}
+	data[1] = control;
+	i2cWriteDS3231(2, data);
+}
+
 ADI_I2C_RESULT setAlarm()
 {
 	ADI_I2C_RESULT result;
@@ -39,16 +92,6 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d)
     if (m > 2 && y % 4 == 0)
         ++days;
     return days + 365 * y + (y + 3) / 4 - 1;
-}
-
-static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s)
-{
-    return ((days * 24L + h) * 60 + m) * 60 + s;
-}
-
-static uint8_t bcd2bin (uint8_t val)
-{
-	return val - 6 * (val >> 4);
 }
 
 DateTime now()
@@ -543,47 +586,4 @@ bool oscillatorCheck()
 		result = false;
 	}
 	return result;
-}
-
-static uint8_t decToBcd(uint8_t val)
-{
-	return ( (val/10*16) + (val%10) );
-}
-
-static uint8_t bcdToDec(uint8_t val)
-{
-	return ( (val/16*10) + (val%16) );
-}
-
-static uint8_t readControlByte(bool which)
-{
-	uint8_t data;
-
-	if(which)
-	{
-		data = 0x0F;
-	}
-	else
-	{
-		data = 0x0E;
-	}
-	i2cWriteDS3231(1, &data);
-
-	i2cReadDS3231(1, &data);
-	return data;
-}
-
-static void writeControlByte(uint8_t control, bool which)
-{
-	uint8_t data[2];
-	if(which)
-	{
-		data[0] = 0x0F;
-	}
-	else
-	{
-		data[0] = 0x0E;
-	}
-	data[1] = control;
-	i2cWriteDS3231(2, data);
 }
