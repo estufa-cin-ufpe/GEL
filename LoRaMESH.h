@@ -6,8 +6,10 @@
 
   Date: 13/12/18
 
-  Ported to ADuCM3029 by Rafael Marinho
+  Ported to ADuCM3029 by Rafael Marinho (github.com/rma6)
+                       & Matheus Souza  (github.com/mfbsouza)
 */
+
 #ifndef _LORA_MESH_
 #define _LORA_MESH_
 
@@ -99,8 +101,6 @@ MeshStatus_Typedef PrepareFrameCommand(uint16_t id, uint8_t command, uint8_t* pa
 MeshStatus_Typedef PrepareFrameTransp(uint16_t id, uint8_t* payload, uint8_t payloadSize);
 
 
-
-
 /**
   * @brief Sends a frame previously prepared by PrepareFrame
   * @param None
@@ -132,7 +132,14 @@ MeshStatus_Typedef ReceivePacketCommand(uint16_t* id, uint8_t* command, uint8_t*
 MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* payloadSize, uint32_t timeout);
 
 
-
+/**
+  * @brief Gets the ID, NET and UNIQUE ID info from the local device
+  * @param id[out]: Local device's id
+  * @param net[out]: Configured NET on local device
+  * @param uniqueId[out]: Device Unique ID 
+  * @retval MESH_OK or MESH_ERROR
+  */
+MeshStatus_Typedef LocalRead(uint16_t* id, uint16_t* net, uint32_t* uniqueId);
 
 
 /**
@@ -142,8 +149,6 @@ MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* 
   * @retval CRC16
   */
 uint16_t ComputeCRC(uint8_t* data_in, uint16_t length);
-
-
 
 
 #endif
