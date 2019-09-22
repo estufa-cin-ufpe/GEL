@@ -107,7 +107,7 @@ DateTime now()
 	uint8_t hh = bcd2bin(data[2]);
 	uint8_t d = bcd2bin(data[4]);
 	uint8_t m = bcd2bin(data[5]);
-	uint16_t y = (uint16_t)bcd2bin(data[6])+2000;
+	uint8_t y = bcd2bin(data[6]);
 
 	return (DateTime){y, m, d, hh, mm, ss};
 }
