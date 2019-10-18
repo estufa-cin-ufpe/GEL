@@ -3,8 +3,11 @@
 uint8_t uartMemory[ADI_UART_BIDIR_MEMORY_SIZE];
 uint32_t uart_hErrors = 0;
 ADI_UART_HANDLE uartDevice = NULL;
-uint8_t* rx_buffer = NULL;
+uint8_t rx_buffer[RX_BUFFER_SIZE];
+uint8_t rx_buffer_b = 0;
+uint8_t rx_buffer_e = 0;
 uint8_t rx_buffer_size = 0;
+uint8_t rx_buffer_overflow = 0;
 
 void uartCallback(void* pAppHandle, uint32_t nEvent, void* pArg)
 {
@@ -16,8 +19,13 @@ void uartCallback(void* pAppHandle, uint32_t nEvent, void* pArg)
 			adi_pwr_ExitLowPowerMode(NULL);
 			break;
 		case ADI_UART_EVENT_NO_RX_BUFFER_EVENT:
-			rx_buffer = (uint8_t*)realloc(rx_buffer, (rx_buffer_size+1)*sizeof(uint8_t));
-			adi_uart_SubmitRxBuffer(uartDevice, &rx_buffer[rx_buffer_size++], 1, 0u);
+			adi_uart_SubmitRxBuffer(uartDevice, &rx_buffer[rx_buffer_e], 1, 0u);
+			rx_buffer_e = (rx_buffer_e+1)%RX_BUFFER_SIZE;
+			rx_buffer_size++;
+			if(rx_buffer_e == rx_buffer_b)
+			{
+				rx_buffer_overflow = 1;
+			}
 			break;
 		default:
 			break;
@@ -92,35 +100,46 @@ ADI_UART_RESULT uartSetup(uint32_t baudrate)
 
 uint8_t uartRead()
 {
+	adi_uart_RegisterCallback(uartDevice, NULL, NULL);
+
 	if(rx_buffer_size>0)
 	{
-		uint8_t temp = rx_buffer[0];
+		uint8_t temp = rx_buffer[rx_buffer_b];
+		rx_buffer_b = (rx_buffer_b+1)%RX_BUFFER_SIZE;
 		rx_buffer_size--;
-		uint8_t* tempbuf = (uint8_t*)malloc(sizeof(uint8_t)*rx_buffer_size);
-		memcpy(tempbuf, rx_buffer+1, rx_buffer_size);
-		free(rx_buffer);
-		rx_buffer = tempbuf;
+		adi_uart_RegisterCallback(uartDevice, uartCallback, NULL);
 		return temp;
 	}
+	adi_uart_RegisterCallback(uartDevice, uartCallback, NULL);
 	return -1;
 }
 
-int uartReadBuffer(uint8_t* buf, uint8_t len)
+int uartReadBuffer(uint8_t* buf, uint32_t len)
 {
+	adi_uart_RegisterCallback(uartDevice, NULL, NULL);
 	if(rx_buffer_size>=len)
 	{
-		memcpy(buf, rx_buffer, len);
-		rx_buffer_size-=len;
-		uint8_t* tempbuf = (uint8_t*)malloc(sizeof(uint8_t)*rx_buffer_size);
-		memcpy(tempbuf, rx_buffer+len, rx_buffer_size);
-		free(rx_buffer);
-		rx_buffer = tempbuf;
+		if(rx_buffer_b < rx_buffer_e && rx_buffer_b+len>= RX_BUFFER_SIZE)
+		{
+			memcpy(buf, &rx_buffer[rx_buffer_b], RX_BUFFER_SIZE-rx_buffer_b);
+			memcpy(&buf[RX_BUFFER_SIZE-rx_buffer_b], &rx_buffer[0], len-(RX_BUFFER_SIZE-rx_buffer_b));
+			rx_buffer_b = (rx_buffer_b+len)%RX_BUFFER_SIZE;
+			rx_buffer_size-=len;
+		}
+		else
+		{
+			memcpy(buf, &rx_buffer[rx_buffer_b], len);
+			rx_buffer_b = (rx_buffer_b+len)%RX_BUFFER_SIZE;
+			rx_buffer_size-=len;
+		}
+		adi_uart_RegisterCallback(uartDevice, uartCallback, NULL);
 		return 0;
 	}
+	adi_uart_RegisterCallback(uartDevice, uartCallback, NULL);
 	return 1;
 }
 
-uint8_t uart_available()
+uint32_t uart_available()
 {
 	return rx_buffer_size;
 }
@@ -130,7 +149,7 @@ ADI_UART_RESULT uartWrite(uint8_t byte)
 	return adi_uart_Write(uartDevice, &byte, 1, true, &uart_hErrors);
 }
 
-ADI_UART_RESULT uartWriteBuffer(uint8_t* buffer, uint8_t len)
+ADI_UART_RESULT uartWriteBuffer(uint8_t* buffer, uint32_t len)
 {
 	return adi_uart_Write(uartDevice, buffer, len, true, &uart_hErrors);
 }
@@ -140,7 +159,15 @@ ADI_UART_RESULT async_uartWrite(uint8_t byte)
 	return adi_uart_SubmitTxBuffer(uartDevice, &byte, 1, true);
 }
 
-ADI_UART_RESULT async_uartWriteBuffer(uint8_t* buffer, uint8_t len)
+ADI_UART_RESULT async_uartWriteBuffer(uint8_t* buffer, uint32_t len)
 {
 	return adi_uart_SubmitTxBuffer(uartDevice, buffer, len, true);
+}
+
+void uartFlush()
+{
+	uint8_t rx_buffer_b = 0;
+	uint8_t rx_buffer_e = 0;
+	uint8_t rx_buffer_size = 0;
+	uint8_t rx_buffer_overflow = 0;
 }

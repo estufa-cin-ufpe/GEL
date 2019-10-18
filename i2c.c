@@ -71,3 +71,53 @@ ADI_I2C_RESULT i2cWrite(uint16_t const SlaveAddress, uint8_t bytes, uint8_t* dat
 		return result;
 	return 0;
 }
+
+ADI_I2C_RESULT i2cWriteDS3231(uint8_t bytes, uint8_t* data)
+{
+
+	ADI_I2C_RESULT result;
+	ADI_I2C_TRANSACTION transaction;
+
+	//set slave address
+	result = adi_i2c_SetSlaveAddress(i2c_device, CLOCK_ADDRESS);
+	if(result)
+		return result;
+
+	//build transaction
+	transaction.pPrologue = data;
+	transaction.nPrologueSize = 0;
+	transaction.nDataSize = bytes;
+	transaction.pData = data;
+	transaction.bReadNotWrite = false;
+	transaction.bRepeatStart = false;
+
+	result = adi_i2c_ReadWrite(i2c_device, &transaction, &i2c_hwErrors);
+	if(result)
+		return result;
+	return 0;
+}
+
+ADI_I2C_RESULT i2cReadDS3231(uint8_t bytes, uint8_t* data)
+{
+
+	ADI_I2C_RESULT result;
+	ADI_I2C_TRANSACTION transaction;
+
+	//set slave address
+	result = adi_i2c_SetSlaveAddress(i2c_device, CLOCK_ADDRESS);
+	if(result)
+		return result;
+
+	//build transaction
+	transaction.pPrologue = data;
+	transaction.nPrologueSize = 0;
+	transaction.nDataSize = bytes;
+	transaction.pData = data;
+	transaction.bReadNotWrite = true;
+	transaction.bRepeatStart = false;
+
+	result = adi_i2c_ReadWrite(i2c_device, &transaction, &i2c_hwErrors);
+	if(result)
+		return result;
+	return 0;
+}

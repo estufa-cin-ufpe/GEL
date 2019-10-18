@@ -59,6 +59,7 @@ ADI_GPIO_RESULT gpioSetup();
 ADI_GPIO_RESULT pinMode(pinMap pm, mode m);
 ADI_GPIO_RESULT digitalWrite(pinMap pm, logicLevel b);
 logicLevel digitalRead(pinMap pm);
-ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im);
+ADI_GPIO_RESULT attachInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im, ADI_GPIO_IRQ gp);
+ADI_GPIO_RESULT setupInterrupt(pinMap pm, ADI_CALLBACK const cb, Imode im, ADI_GPIO_IRQ gp);
 
 #endif

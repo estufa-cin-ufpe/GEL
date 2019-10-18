@@ -14,7 +14,6 @@
 #define _LORA_MESH_
 
 #include <stdint.h>
-#include "timer0.h"
 
 #ifndef UART_H_
 #include "uart.h"

@@ -13,12 +13,16 @@
 #include <drivers/pwr/adi_pwr.h>
 #endif
 
+#define RX_BUFFER_SIZE 256
 
 //uart control variables
 extern uint8_t uartMemory[ADI_UART_BIDIR_MEMORY_SIZE];
 extern uint32_t uart_hErrors;
 extern ADI_UART_HANDLE uartDevice;
-extern uint8_t* rx_buffer;
+extern uint8_t rx_buffer[RX_BUFFER_SIZE];
+extern uint8_t rx_buffer_b;
+extern uint8_t rx_buffer_e;
+extern uint8_t rx_buffer_overflow;
 extern uint8_t rx_buffer_size;
 
 void uartCallback(void* pAppHandle, uint32_t nEvent, void* pArg);
@@ -28,7 +32,7 @@ void uartCallback(void* pAppHandle, uint32_t nEvent, void* pArg);
 ADI_UART_RESULT uartSetup(uint32_t baudrate);
 
 //returns number of bytes received available in buffer
-uint8_t uart_available();
+uint32_t uart_available();
 
 //returns one byte from buffer as a pointer
 uint8_t uartRead();
@@ -36,7 +40,7 @@ uint8_t uartRead();
 //reads len bytes from buffer. Returns 0 in case of success and 1 otherwise
 //buf: pointer where the bytes are going to be copied to.
 //len: number of bytes to be read
-int uartReadBuffer(uint8_t* buf, uint8_t len);
+int uartReadBuffer(uint8_t* buf, uint32_t len);
 
 //writes one byte (blocking)
 //byte: data to be written
@@ -45,7 +49,7 @@ ADI_UART_RESULT uartWrite(uint8_t byte);
 //writes len bytes (blocking)
 //buffer: pointer with data to be written
 //len: number of bytes to be written
-ADI_UART_RESULT uartWriteBuffer(uint8_t* buffer, uint8_t len);
+ADI_UART_RESULT uartWriteBuffer(uint8_t* buffer, uint32_t len);
 
 //writes one byte (non-blocking)
 //byte: data to be written
@@ -54,6 +58,8 @@ ADI_UART_RESULT async_uartWrite(uint8_t byte);
 //writes len bytes (non-blocking)
 //buffer: pointer with data to be written
 //len: number of bytes to be written
-ADI_UART_RESULT async_uartWriteBuffer(uint8_t* buffer, uint8_t len);
+ADI_UART_RESULT async_uartWriteBuffer(uint8_t* buffer, uint32_t len);
+
+void uartFlush();
 
 #endif /* UART_H_ */

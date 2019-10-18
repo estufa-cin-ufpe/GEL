@@ -30,9 +30,7 @@ static uint16_t deviceId = -1;
 
 void SerialFlush()
 {
-	free(rx_buffer);
-	rx_buffer = NULL;
-	rx_buffer_size = 0;
+	uartFlush();
 }
 
 /**
