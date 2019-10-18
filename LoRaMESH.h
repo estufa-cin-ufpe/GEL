@@ -1,13 +1,15 @@
 /* ---------------------------------------------------
-        Radioenge Equipamentos de Telecomunicações
+        Radioenge Equipamentos de Telecomunicaï¿½ï¿½es
    ---------------------------------------------------
     This library contains a set of functions to configure
     and operate the EndDevice LoRaMESH Radioenge
 
   Date: 13/12/18
 
-  Ported to ADuCM3029 by Rafael Marinho
+  Ported to ADuCM3029 by Rafael Marinho (github.com/rma6)
+                       & Matheus Souza  (github.com/mfbsouza)
 */
+
 #ifndef _LORA_MESH_
 #define _LORA_MESH_
 
@@ -77,6 +79,15 @@ typedef enum
 
 /* ----- Public Functions Prototype ----- */
 
+/**
+  * @brief Prepares a frame to transmission via commands interface
+  * @param id: Target device's ID
+  * @param command: Byte that indicates the command
+  * @param payload: pointer to the array holding the payload
+  * @param payloadSize: payload size
+  * @retval MESH_OK or MESH_ERROR
+  */
+MeshStatus_Typedef PrepareFrameCommand(uint16_t id, uint8_t command, uint8_t* payload, uint8_t payloadSize);
 
 
 /**
@@ -89,8 +100,6 @@ typedef enum
 MeshStatus_Typedef PrepareFrameTransp(uint16_t id, uint8_t* payload, uint8_t payloadSize);
 
 
-
-
 /**
   * @brief Sends a frame previously prepared by PrepareFrame
   * @param None
@@ -99,6 +108,16 @@ MeshStatus_Typedef PrepareFrameTransp(uint16_t id, uint8_t* payload, uint8_t pay
 MeshStatus_Typedef SendPacket();
 
 
+/**
+  * @brief Receives a packet from the commands interface
+  * @param id[out]: ID from the received message
+  * @param command[out]: received command
+  * @param payload[out]: buffer where the received payload will be copied to
+  * @param payloadSize[out]: received payload size
+  * @param timeout: reception timeout, in ms
+  * @retval MESH_OK or MESH_ERROR
+  */
+MeshStatus_Typedef ReceivePacketCommand(uint16_t* id, uint8_t* command, uint8_t* payload, uint8_t* payloadSize, uint32_t timeout);
 
 
 /**
@@ -112,7 +131,14 @@ MeshStatus_Typedef SendPacket();
 MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* payloadSize, uint32_t timeout);
 
 
-
+/**
+  * @brief Gets the ID, NET and UNIQUE ID info from the local device
+  * @param id[out]: Local device's id
+  * @param net[out]: Configured NET on local device
+  * @param uniqueId[out]: Device Unique ID 
+  * @retval MESH_OK or MESH_ERROR
+  */
+MeshStatus_Typedef LocalRead(uint16_t* id, uint16_t* net, uint32_t* uniqueId);
 
 
 /**
@@ -122,8 +148,6 @@ MeshStatus_Typedef ReceivePacketTransp(uint16_t* id, uint8_t* payload, uint8_t* 
   * @retval CRC16
   */
 uint16_t ComputeCRC(uint8_t* data_in, uint16_t length);
-
-
 
 
 #endif
