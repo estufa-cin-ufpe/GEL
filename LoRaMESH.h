@@ -1,5 +1,5 @@
 /* ---------------------------------------------------
-        Radioenge Equipamentos de Telecomunica��es
+        Radioenge Equipamentos de Telecomunicações
    ---------------------------------------------------
     This library contains a set of functions to configure
     and operate the EndDevice LoRaMESH Radioenge
